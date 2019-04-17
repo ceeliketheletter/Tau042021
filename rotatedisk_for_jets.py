@@ -20,9 +20,9 @@ final_img_kp = pf.open("/Users/CEE/Desktop/cleaned/final_img_kp_shifted.fits")
 final_img_j_pad = pf.open("/Users/CEE/Desktop/cleaned/final_img_j_pad_shifted.fits")
 
 
+print "To run, type: main(wavelength)"
 
 
-'''
 def main(pic):
     pic = pic[0].data
 
@@ -87,7 +87,7 @@ def points(xcoords, ycoords, pic):
  print degrees, 'degrees'
  
  apply(pic, degrees)
-'''
+
 
 
 def apply(pic, degrees):
@@ -118,7 +118,7 @@ def apply(pic, degrees):
     image = 'final_img_kp'
         
         
- title = image + '_horizontal.fits'            
+ title = image + '_jet_rotated.fits'            
  pf.writeto(title, m)
 
 

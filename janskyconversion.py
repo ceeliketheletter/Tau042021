@@ -7,98 +7,79 @@ import glob
 
 #import fits file
 
-F606W_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/F606W_lessnoise.fits")
-F814W1_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/F814W1_lessnoise.fits")
-F814W2_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/F814W2_lessnoise.fits")
-F475W_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/F475W_lessnoise.fits")
-final_img_j_pad_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/final_img_j_pad_lessnoise.fits")
-final_img_kp_lessnoise = pf.open("/Users/CEE/Desktop/cleaned/final_img_kp_lessnoise.fits")
+F606W_lessnoise = pf.open("/Users/CEE/Desktop/new_objects/tau042021/F606W_lessnoise.fits")
+F814W1_lessnoise = pf.open("/Users/CEE/Desktop/new_objects/tau042021/F814W1_lessnoise.fits")
+F814W2_lessnoise = pf.open("/Users/CEE/Desktop/new_objects/tau042021/F814W2_lessnoise.fits")
+F475W_lessnoise = pf.open("/Users/CEE/Desktop/new_objects/tau042021/F475W_lessnoise.fits")
 
-#make it all an array
+print "This code will convert the pixel values into Janskys"
+print" "
 
-F606W = np.array(F606W_lessnoise[0].data)
-F475W =np.array(F475W_lessnoise[0].data)
-F814W1 =np.array(F814W1_lessnoise[0].data)
-F814W2 =np.array(F814W2_lessnoise[0].data)
-final_img_j_pad =np.array(final_img_j_pad_lessnoise[0].data)
-final_img_kp =np.array(final_img_kp_lessnoise[0].data)
+print "To run, type 'convert( wavelength_lessnoise )"
 
-files = [F606W, F475W, F814W1, final_img_kp, final_img_j_pad]
-
-print "To run, type 'convert( ' [filename] ' )"
-
-def convert(filename):
+def convert(pic):
+    
+    
+        if pic == F606W_lessnoise:
+            name = 'F606W'
+            wavelength = 6.06e-7
+     
+        elif pic == F475W_lessnoise:
+            name = 'F475W'
+            wavelength = 4.773e-7
+     
+        elif pic == F814W1_lessnoise:
+            name = 'F814W1'
+            wavelength = 8.14e-7
+     
+        elif pic == F814W2_lessnoise:
+            name = 'F814W2'
+            wavelength = 8.14e-7
+     
+        pic = pic[0].data
 
         c = 2.998e8
         ergperstowattconversion = 0.00000010 #watts
         cm2tom2conversion = 0.0001 #m2
         angstromtometersconversion = 1e-10 #m
         janskyfactor = 1e-26
-        pixscale_475 = 0.03962306984   #arcseconds
+        
+        #pixscale_475 = 0.03962306984   #arcseconds
+        
+        wavelenth2overc = (wavelength)**2 / c
+        
+        print " "
+        inversesensitivity = np.float(raw_input("Inverse sensitivity of filter? (in ergs/cm2/Ang/electron ) "))
+        
+        factors = inversesensitivity * ergperstowattconversion  * wavelenth2overc / (cm2tom2conversion * angstromtometersconversion * janskyfactor)
+            
   
-
+        '''
         if filename == 'F606W':
-            image = F606W
             inversesensitivity = 7.8624312E-20 
-            wavelength = 6.06e-7
-            wavelenth2overc = (wavelength)**2 / c
-            factors = inversesensitivity * ergperstowattconversion  * wavelenth2overc / (cm2tom2conversion * angstromtometersconversion * janskyfactor)
             
 
         if filename == 'F475W':
-            image = F475W
             inversesensitivity =  2.57266105E-19 
-            wavelength = 4.773e-7
-            wavelenth2overc = (wavelength)**2 / c
-            factors = inversesensitivity * ergperstowattconversion  * wavelenth2overc / (cm2tom2conversion * angstromtometersconversion * janskyfactor)
+            
             
   
         if filename == 'F814W1':
-            image = F814W1
             inversesensitivity = 7.0331646E-20  
-            wavelength = 8.14e-7
-            wavelenth2overc = (wavelength)**2 / c
-            factors = inversesensitivity * ergperstowattconversion  * wavelenth2overc / (cm2tom2conversion * angstromtometersconversion * janskyfactor)
-            
             
 
         if filename == 'F814W2':
-            image = F814W2
             inversesensitivity =  1.5304799E-19 
-            wavelength = 8.14e-7
-            wavelenth2overc = (wavelength)**2 / c
-            factors = inversesensitivity * ergperstowattconversion  * wavelenth2overc / (cm2tom2conversion * angstromtometersconversion * janskyfactor)
-            
+        '''  
         
      
-        if filename == 'final_img_j_pad':
-            jpadcounts = 2058045.8
-            jpadjansky = 0.0010827
-            image = final_img_j_pad
-            factors = jpadjansky/jpadcounts
-            
-            
-    
-        if filename == 'final_img_kp':
-            image = final_img_kp
-            kpcounts = 1215444.9 
-            kpjansky = 0.001215
-            factors = kpjansky/kpcounts
-
-        ''' 
-        for x in range(len(image[0])):
-            x = x * pixscale_475
-            
-            
-        for y in range(len(image)):
-            y = y * pixscale_475
-        '''
         
                   
             
-        newfile = image *  factors 
-        title = filename + '_jansky1.fits' 
+        newfile = pic *  factors 
+        title = name + '_jansky.fits' 
         pf.writeto(title, newfile)
+        print " "
         print "Your file may have been saved!" 
         
         
