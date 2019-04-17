@@ -1,0 +1,32 @@
+'''This is a program that will combine the cropping, turning, and shifting of hst and keck images into one streamlined program requiring user imput. Input: original image. Output: individual fits files for each step of the process. This program may require the user to open DS9 seperately'''
+
+
+user input:
+"Name of object" #opens a directory, then use the glob function to grab all the filters in there                                                                                          
+#Run a for loop in each step to cover each filter                                                                                                                                         
+#Deposit output files into a seperate output directory                                                                                                                                    
+
+
+
+
+1:rotate (from turnapic.py)(using header info so North us up)                                                                                                                     
+'''only HST, not Keck'''
+
+
+2: equalize pixelscales (from pixscale.py) #except 475                                                                                                                                        
+
+
+3: crop/shift (by centroiding a universal star (with findacentroid) as a reference point, crop each image (using cropapic.py) so their dimensions align along that star)        
+
+
+3.5: check (using centroids.py)(Find the distances/slopes between stars to ensure shifting was done correctly)                                                         
+
+
+4: rotate horizontal (using rotatedisk.py)(so disk is horizontal)                                                                                                                
+
+
+5: crop (from cropapic.py)(just including disk and nothing else)(pixels are aligned)                                                                                             
+
+
+6: take cuts along the disk and plot intensity (using finalplots.py)                                                                                                              
+
